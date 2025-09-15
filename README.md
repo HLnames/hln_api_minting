@@ -29,7 +29,7 @@ API will respond with a JSON object containing the specific arguments needed to 
   "timestamp": 1757904606,
   "token": "native",
   "amountRequired": "199004",
-  "referral_hash": "0x..."
+  "referralHash": "0x..."
 }
 ```
 
@@ -72,6 +72,6 @@ Registration prices are based on the length of the name and are set in USD for a
 
 ## Example Snippets
 
-- **`example/getSignedArgs.ts`**: A simple TypeScript function to request valid Minter arguments from the API.
-- **`example/getSignedArgs+Mint.ts`**: A complete TypeScript example demonstrating the full workflow, from fetching API arguments to preparing a transaction object on behalf of connected signer.
-- **`example/mintWithApiArgs.s.sol`**: A Forge script showing how to use the API arguments to interact with the Minter contract via RPC.
+- **[`example/getSignedArgs.ts`](https://github.com/HLnames/hln_api_minting/blob/master/example/getSignedArgs.ts)**: A simple TypeScript function to request valid Minter arguments from the API.
+- **[`example/getSignedArgs+Mint.ts`](https://github.com/HLnames/hln_api_minting/blob/master/example/getSignedArgs%2BMint.ts)**: A complete TypeScript example demonstrating the full workflow, from fetching API arguments to preparing a transaction object on behalf of connected signer.
+- **[`example/mintWithApiArgs.s.sol`](https://github.com/HLnames/hln_api_minting/blob/master/example/mintWithApiArgs.s.sol)**: A forge script loading the API arguments to interact with the Minter contract via RPC.
