@@ -15,7 +15,7 @@ Integrating the minting process into your dApp with two steps:
 
 Request a "signed mint-pass" for a given label. Supplying an authorized `API_KEY` is required.
 
-Send a `POST` request to the following resource URI with label appended: `api/private/sign_mintpass/${label}`
+Send a `POST` request to the following resource URI with label appended: `/api/private/sign_mintpass/{label}`
 
 *   **Headers**:
     *   `X-API-Key`: AUTHORIZED-API-KEY.
@@ -58,8 +58,8 @@ function mintWithNative(
 
 The minting process includes an optional referral system.
 
-- **With a Referral**: To attribute a mint to a referrer, the `referral_hash` must be the `namehash` of the referrer's HL name (e.g., `namehash("referrer.hl")`).
-- **Without a Referral**: To mint without a referral, pass an empty 32-byte hex value (`0x0000...`) as the `referral_hash`.
+- **With a Referral**: To attribute a mint to a referrer, the `referralHash` must be the `namehash` of the referrer's HL name (e.g., `namehash("referrer.hl")`).
+- **Without a Referral**: To mint without a referral, pass an empty 32-byte hex value (`0x0000...`) as the `referralHash`.
 
 ## Pricing
 
@@ -72,6 +72,6 @@ Registration prices are based on the length of the name and are set in USD for a
 
 ## Example Snippets
 
-- **[`example/getSignedArgs.ts`](https://github.com/HLnames/hln_api_minting/blob/master/example/getSignedArgs.ts)**: A simple TypeScript function to request valid Minter arguments from the API.
-- **[`example/getSignedArgs+Mint.ts`](https://github.com/HLnames/hln_api_minting/blob/master/example/getSignedArgs%2BMint.ts)**: A complete TypeScript example demonstrating the full workflow, from fetching API arguments to preparing a transaction object on behalf of connected signer.
-- **[`example/mintWithApiArgs.s.sol`](https://github.com/HLnames/hln_api_minting/blob/master/example/mintWithApiArgs.s.sol)**: A forge script loading the API arguments to interact with the Minter contract via RPC.
+- **[`example/getSignedArgs.ts`](example/getSignedArgs.ts)**: A simple TypeScript function to request valid Minter arguments from the API.
+- **[`example/getSignedArgs+Mint.ts`](example/getSignedArgs%2BMint.ts)**: A complete TypeScript example demonstrating the full workflow, from fetching API arguments to preparing a transaction object on behalf of connected signer.
+- **[`example/mintWithApiArgs.s.sol`](example/mintWithApiArgs.s.sol)**: A forge script loading the API arguments to interact with the Minter contract via RPC.
