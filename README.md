@@ -2,7 +2,7 @@
 
 This repository provides example snippets for minting referral-enabled Hyperliquid Names on HyperEVM Testnet via the HL Names REST-API.
 
-| **Resource** | **Endpoint/Address** |
+| **Resource** | **Address** |
 | :--- | :--- |
 | Testnet Minter Contract | `0x6284e439514604B9eaAbc8537330d3E4f0313Df6` |
 | Testnet API Endpoint | `https://api.testnet.hlnames.xyz`|
@@ -15,7 +15,7 @@ Integrating the minting process into your dApp with two steps:
 
 Request a "signed mint-pass" for a given label. Supplying an authorized `API_KEY` is required.
 
-Send a `POST` request to the following resource URI with label appended: `/api/private/sign_mintpass/{label}`
+Send a `POST` request to the following resource URI with label appended: `/private/sign_mintpass/{label}`
 
 *   **Headers**:
     *   `X-API-Key`: AUTHORIZED-API-KEY.
