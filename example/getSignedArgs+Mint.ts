@@ -1,5 +1,6 @@
 import { createWalletClient, custom } from 'viem'
 import { hyperliquidEvmTestnet } from 'viem/chains'
+import { minterAbi } from './abi/minterAbi'
 
 /** Get signature + minter arguments from API call **/
 
@@ -36,35 +37,6 @@ export const getSingleSignedLabel = async () => {
 // Call Minter contract with minter_args
 // Requires env var: TESTNET_MINTER_ADDRESS
 const minterAddress = process.env.TESTNET_MINTER_ADDRESS as `0x${string}`;
-
-const minterAbi = [
-  {
-    name: 'mintWithNative',
-    type: 'function',
-    stateMutability: 'payable',
-    inputs: [
-      { type: 'string', name: 'label' },
-      { type: 'uint256', name: 'durationInYears' },
-      { type: 'bytes', name: 'sig' },
-      { type: 'uint256', name: 'timestamp' },
-      { type: 'bytes32', name: 'referral' },
-    ],
-    outputs: [],
-  },
-  {
-    name: 'getPriceOfNativeInUSD',
-    type: 'function',
-    stateMutability: 'view',
-    inputs: [],
-    outputs: [
-      {
-        "name": "",
-        "type": "uint256",
-        "internalType": "uint256"
-      }
-    ],
-  }
-] as const;
 
 // For production dApp with user wallet (MetaMask, WalletConnect, etc.)
 export const createUserWalletClient = (walletProvider: any) => {
