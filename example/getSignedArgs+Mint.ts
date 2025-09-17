@@ -1,5 +1,6 @@
 import { createWalletClient, custom } from 'viem'
 import { hyperliquidEvmTestnet } from 'viem/chains'
+import { normalize } from 'viem/ens'
 import { minterAbi } from './abi/minterAbi'
 
 /** Get signature + minter arguments from API call **/
@@ -8,6 +9,7 @@ import { minterAbi } from './abi/minterAbi'
 export const getSingleSignedLabel = async () => {
     const apiKey = process.env.API_KEY as string;
     const label = 'examplename';
+    const normalizedLabel = normalize(label);
     const response = await fetch(
         'https://api.testnet.hlnames.xyz/private/sign_mintpass/',
         {
@@ -16,7 +18,7 @@ export const getSingleSignedLabel = async () => {
                 'X-API-Key': apiKey,
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({ label })
+            body: JSON.stringify({ label: normalizedLabel })
         }
     );
 
@@ -24,7 +26,7 @@ export const getSingleSignedLabel = async () => {
         throw new Error(`HTTP error! status: ${response.status}`);
     }
 
-    // minter_args types: {label: string, sig: string, timestamp: number, tieredPrice: string, referral_hash: string}
+    // minter_args types: {label: string, sig: string, timestamp: number, amountRequired: string, referral_hash: string}
     const minter_args = await response.json();
     if (minter_args.sig === undefined) {
         throw new Error("Failed to get signature.");
@@ -53,8 +55,16 @@ export const createUserWalletClient = (walletProvider: any) => {
  * @returns 
  */
 export const prepareMintTransaction = async (minter_args: any, walletClient: any) => {
+
   // Payment amount comes directly from API response (no contract read needed)
-  const requiredPayment = BigInt(minter_args.tieredPrice);
+  // API returns amountRequired as string to preserve precision for large values, so cast to BigInt
+  const amountRequired = BigInt(minter_args.amountRequired);
+
+  // Add in 2% slippage to the HYPE/USD rate, in case of oracle volatility.
+  // N.B. Should be refunded to payer if unfilled
+  const slippagePercentage = 2n; // 2%
+  const hundred = 100n;
+  const paymentValue = amountRequired * (hundred + slippagePercentage) / hundred;
 
   // Return transaction object for user wallet to sign
   return {
@@ -68,6 +78,6 @@ export const prepareMintTransaction = async (minter_args: any, walletClient: any
       minter_args.timestamp,
       minter_args.referral_hash,
     ],
-    value: requiredPayment,
+    value: paymentValue,
   };
 };
