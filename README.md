@@ -13,15 +13,23 @@ Integrating the minting process into your dApp with two steps:
 
 ### Step 1: Get Minter Arguments from the API
 
-Request a "signed mint-pass" for a given label. Supplying an authorized `API_KEY` is required.
+#### Terms
+- **signed mint-pass**: A valid signature plus arguments for minting a specific name
+- **label**: A name without its .hl suffix
 
-Send a `POST` request to the following resource URI with label appended: `/private/sign_mintpass/{label}`
+Request a signed mint-pass for a given label. 
+
+First, ensure the label is normalized before calling the API. We use the [`normalize`](https://viem.sh/docs/ens/utilities/normalize#normalize) utility from the `viem/ens` package. A label must be ENS-normal and between 1-30 characters.
+
+Next, send a `POST` request to the following resource URI with label appended: `/private/sign_mintpass/{label}`
 
 *   **Headers**:
-    *   `X-API-Key`: AUTHORIZED-API-KEY.
+    *   `X-API-Key`: `API_KEY`
     *   `Content-Type`: `application/json`
 
-API will respond with a JSON object containing the specific arguments needed to call Minter contract:
+An authorized `API_KEY` value in the header is required. 
+
+If no error, the API will respond with a JSON object containing the specific arguments needed to call Minter contract:
 ```json
 {
   "label": "examplename",
@@ -35,6 +43,7 @@ API will respond with a JSON object containing the specific arguments needed to 
 
 - **`amountRequired`**: The required payment in `token` mode (native == HYPE), in its HyperEVM precision. API handles the oracle quote for calculating the required amount for that price tier.
 - **`sig`**: A unique signature for the minting transaction. It is only valid for **60 seconds**, until the `timestamp` is reached.
+- **`refreshHash`**: The namehash of the referrer's HL name to credit.
 
 ### Step 2: Call Minter contract
 
@@ -52,7 +61,7 @@ function mintWithNative(
 ) external payable;
 ```
 - The `msg.value` of this transaction must be equal to the `amountRequired` from the API response.
-- The `durationInYears` parameter is set by the client to determine the registration period. Setting as zero will revert.
+- The `durationInYears` parameter is set by the client to determine the registration period. It defaults to 1 year.
 
 ## Referral System
 
@@ -63,12 +72,13 @@ The minting process includes an optional referral system.
 
 ## Pricing
 
-Registration prices are based on the length of the name and are set in USD for a one-year period. The price scales linearly for multi-year registrations (e.g., a two-year registration costs double).
+Registration prices are based on the length of the desired name and are paid in USD for a one-year base period.
 
 - **1 character**: $69
 - **2 characters**: $42
 - **3 characters**: $33
 - **4+ characters**: $20
+- Each additional year extension: +$10
 
 ## Example Snippets
 
