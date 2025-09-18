@@ -2,10 +2,20 @@
 
 This repository provides example snippets for minting referral-enabled Hyperliquid Names on HyperEVM Testnet via the HL Names REST-API.
 
+Join our Telegram group: https://t.me/+pDbWCyCnvrxlZmJh
+
 | **Resource** | **Address** |
 | :--- | :--- |
 | Testnet Minter Contract | `0x6284e439514604B9eaAbc8537330d3E4f0313Df6` |
 | Testnet API Endpoint | `https://api.testnet.hlnames.xyz`|
+
+## Introduction
+Hyperliquid Names enables names to be minted directly inside 3rd party dApps. This allows for a seamless onboarding flow where users can set up their wallet and give it a .hl identity in one experience. Combined with account abstraction, smart wallets, and other UX improvements, this enables dApps to deliver a familiar, web2-like account setup inside a web3 context.
+
+3rd party minting also synergizes directly with the Hyperliquid Names affiliate program. DApps that integrate minting can automatically pass their own referral into the flow, adding an additional revenue stream. Here’s how it works:
+
+- **User benefit**: Every name minted using your referral gets a 10% discount off the total cost.
+- **DApp benefit**: Your dApp earns a 25% kickback on the total cost.
 
 ## Minting Workflow
 
