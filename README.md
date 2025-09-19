@@ -95,3 +95,4 @@ Registration prices are based on the length of the desired name and are paid in 
 - **[`example/getSignedArgs.ts`](example/getSignedArgs.ts)**: A simple TypeScript function to request valid Minter arguments from the API.
 - **[`example/getSignedArgs+Mint.ts`](example/getSignedArgs%2BMint.ts)**: A complete TypeScript example demonstrating the full workflow, from fetching API arguments to preparing a transaction object on behalf of connected signer.
 - **[`example/mintWithApiArgs.s.sol`](example/mintWithApiArgs.s.sol)**: A forge script loading the API arguments to interact with the Minter contract via RPC.
+- **[`example/getSignedArgs+Mint.py`](example/getSignedArgs+Mint.py)**: The full workflow for Python environment.
