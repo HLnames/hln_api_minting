@@ -9,42 +9,49 @@ import { minterAbi } from './abi/minterAbi'
 export const getSingleSignedLabel = async () => {
     const apiKey = process.env.API_KEY as string;
     const label = 'examplename';
-    const normalizedLabel = normalize(label);
-    const response = await fetch(
-        'https://api.testnet.hlnames.xyz/private/sign_mintpass/',
-        {
-            method: 'POST',
-            headers: {
-                'X-API-Key': apiKey,
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ label: normalizedLabel })
-        }
-    );
 
-    if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-    }
+    // Fail early if label cannot be normalized
+    try {
+      const normalizedLabel = normalize(label);
 
-    // minter_args types: {label: string, sig: string, timestamp: number, amountRequired: string, referral_hash: string}
-    const minter_args = await response.json();
-    if (minter_args.sig === undefined) {
-        throw new Error("Failed to get signature.");
-    }
-    else {
-        return minter_args;
-    }
+      const response = await fetch(
+          'https://api.testnet.hlnames.xyz/private/sign_mintpass/',
+          {
+              method: 'POST',
+              headers: {
+                  'X-API-Key': apiKey,
+                  'Content-Type': 'application/json'
+              },
+              body: JSON.stringify({ label: normalizedLabel })
+          }
+      );
+
+      if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      // minter_args types: {label: string, sig: string, timestamp: number, amountRequired: string, referral_hash: string}
+      const minter_args = await response.json();
+      if (minter_args.sig === undefined) {
+          throw new Error("Failed to get signature.");
+      }
+      else {
+          return minter_args;
+      }
+  } catch (error) {
+    console.error(`Error normalizing label, abort: ${error}`);
+  }
 }
 
 // Call Minter contract with minter_args
 // Requires env var: TESTNET_MINTER_ADDRESS
 const minterAddress = process.env.TESTNET_MINTER_ADDRESS as `0x${string}`;
 
-// For production dApp with user wallet (MetaMask, WalletConnect, etc.)
+// For production dApp with user wallet
 export const createUserWalletClient = (walletProvider: any) => {
   return createWalletClient({
     chain: hyperliquidEvmTestnet,
-    transport: custom(walletProvider), // walletProvider is window.ethereum for MetaMask
+    transport: custom(walletProvider),
   });
 };
 
@@ -73,7 +80,7 @@ export const prepareMintTransaction = async (minter_args: any, walletClient: any
     functionName: 'mintWithNative',
     args: [
       minter_args.label,
-      minter_args.durationInYears,
+      minter_args.durationInYears || 1, // Default to 1 year, if not unset by user
       minter_args.sig,
       minter_args.timestamp,
       minter_args.referral_hash,
