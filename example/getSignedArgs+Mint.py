@@ -68,9 +68,9 @@ def prepare_mint_transaction(minter_args, web3_client):
     return {
         'to': to_checksum_address(minter_address),
         'value': payment_value,
-        'data': minter_contract.encode_abi(
-            'mintWithNative',
-            [
+        'data': minter_contract.encodeABI(
+            fn_name='mintWithNative',
+            args=[
                 minter_args['label'],
                 minter_args.get('durationInYears', 1),  # Default to 1 if not provided
                 minter_args['sig'],
