@@ -15,14 +15,13 @@ export const getSingleSignedLabel = async () => {
       const normalizedLabel = normalize(label);
 
       const response = await fetch(
-          'https://api.testnet.hlnames.xyz/private/sign_mintpass/',
+          'https://api.testnet.hlnames.xyz/private/sign_mintpass/' + normalizedLabel,
           {
               method: 'POST',
               headers: {
                   'X-API-Key': apiKey,
                   'Content-Type': 'application/json'
               },
-              body: JSON.stringify({ label: normalizedLabel })
           }
       );
 

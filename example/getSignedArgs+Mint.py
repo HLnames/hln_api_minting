@@ -17,12 +17,11 @@ def get_single_signed_label():
     try:
         normalized_label = normalize_name(label)
         response = requests.post(
-            'https://api.testnet.hlnames.xyz/private/sign_mintpass/',
+            'https://api.testnet.hlnames.xyz/private/sign_mintpass/' + normalized_label,
             headers={
                 'X-API-Key': api_key,
                 'Content-Type': 'application/json'
             },
-            json={'label': normalized_label}
         )
 
         if not response.ok:
