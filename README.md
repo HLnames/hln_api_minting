@@ -46,14 +46,12 @@ If no error, the API will respond with a JSON object containing the specific arg
   "sig": "0x...",
   "timestamp": 1757904606,
   "token": "native",
-  "amountRequired": "199004",
-  "referralHash": "0x..."
+  "amountRequired": "1000000000000000000",
 }
 ```
 
 - **`amountRequired`**: The required payment in `token` mode (native == HYPE), in its HyperEVM precision. API handles the oracle quote for calculating the required amount for that price tier.
 - **`sig`**: A unique signature for the minting transaction. It is only valid for **60 seconds**, until the `timestamp` is reached.
-- **`refreshHash`**: The namehash of the referrer's HL name to credit.
 
 ### Step 2: Call Minter contract
 
@@ -77,7 +75,7 @@ function mintWithNative(
 
 The minting process includes an optional referral system.
 
-- **With a Referral**: To attribute a mint to a referrer, the `referralHash` must be the `namehash` of the referrer's HL name (e.g., `namehash("referrer.hl")`).
+- **With a Referral**: To attribute a mint to a referrer, `referral` must be the `namehash` of the referrer's HL name (e.g., `namehash("referrer.hl")`).
 - **Without a Referral**: To mint without a referral, pass an empty 32-byte hex value (`0x0000...`) as the `referralHash`.
 
 ## Pricing
