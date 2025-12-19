@@ -29,7 +29,7 @@ export const getSingleSignedLabel = async () => {
           throw new Error(`HTTP error! status: ${response.status}`);
       }
 
-      // minter_args types: {label: string, sig: string, timestamp: number, amountRequired: string, referral_hash: string}
+      // minter_args types: {label: string, sig: string, timestamp: number, amountRequired: string}
       const minter_args = await response.json();
       if (minter_args.sig === undefined) {
           throw new Error("Failed to get signature.");
@@ -82,7 +82,7 @@ export const prepareMintTransaction = async (minter_args: any, walletClient: any
       minter_args.durationInYears || 1, // Default to 1 year, if not unset by user
       minter_args.sig,
       minter_args.timestamp,
-      minter_args.referral_hash,
+      "0x0000000000000000000000000000000000000000000000000000000000000000", // Replace with referrer's namehash
     ],
     value: paymentValue,
   };

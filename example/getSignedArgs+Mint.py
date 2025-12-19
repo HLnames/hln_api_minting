@@ -27,7 +27,7 @@ def get_single_signed_label():
         if not response.ok:
             raise Exception(f'HTTP error! status: {response.status_code}')
 
-        # minter_args types: {label: string, sig: string, timestamp: number, amountRequired: string, referral_hash: string}
+        # minter_args types: {label: string, sig: string, timestamp: number, amountRequired: string}
         minter_args = response.json()
         if 'sig' not in minter_args or minter_args['sig'] is None:
             raise Exception("Failed to get signature.")
@@ -74,7 +74,7 @@ def prepare_mint_transaction(minter_args, web3_client):
                 minter_args.get('durationInYears', 1),  # Default to 1 if not provided
                 minter_args['sig'],
                 minter_args['timestamp'],
-                minter_args['referral_hash'],
+                '0x0000000000000000000000000000000000000000000000000000000000000000',  # Replace with referrer's namehash
             ]
         ),
     }

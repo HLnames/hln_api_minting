@@ -23,7 +23,7 @@ export const getSingleSignedLabel = async () => {
             throw new Error(`HTTP error! status: ${response.status}`);
         }
 
-        // minter_args types: {label: string, sig: string, timestamp: number, amountRequired: string, referral_hash: string}
+        // minter_args types: {label: string, sig: string, timestamp: number, amountRequired: string}
         const minter_args = await response.json();
         if (minter_args.sig === undefined) {
             throw new Error("Failed to get signature.");
