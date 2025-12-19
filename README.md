@@ -6,7 +6,7 @@ Join our Telegram group: https://t.me/+pDbWCyCnvrxlZmJh
 
 | **Resource** | **Address** |
 | :--- | :--- |
-| Testnet Minter Contract | `0x6284e439514604B9eaAbc8537330d3E4f0313Df6` |
+| Testnet Minter Contract | `0x39114061C1Fbd0d3E73CEd5eABf602D5d8813967` |
 | Testnet API Endpoint | `https://api.testnet.hlnames.xyz`|
 
 ## Introduction
