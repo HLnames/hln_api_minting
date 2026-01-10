@@ -15,7 +15,7 @@ export const getSingleSignedLabel = async () => {
       const normalizedLabel = normalize(label);
 
       const response = await fetch(
-          'https://api.testnet.hlnames.xyz/private/sign_mintpass/' + normalizedLabel,
+          'https://api.testnet.hlnames.xyz/sign_mintpass/' + normalizedLabel,
           {
               method: 'POST',
               headers: {

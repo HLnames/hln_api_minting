@@ -1,6 +1,8 @@
 # Minting Hyperliquid Names via API
 
-This repository provides example snippets for minting referral-enabled Hyperliquid Names on HyperEVM Testnet via the HL Names REST-API.
+This repository provides example snippets for minting referral-enabled Hyperliquid Names via the HL Names REST-API.
+
+Try the demo: https://demo.hlnames.xyz
 
 Join our Telegram group: https://t.me/+pDbWCyCnvrxlZmJh
 
@@ -8,6 +10,8 @@ Join our Telegram group: https://t.me/+pDbWCyCnvrxlZmJh
 | :--- | :--- |
 | Testnet Minter Contract | `0x39114061C1Fbd0d3E73CEd5eABf602D5d8813967` |
 | Testnet API Endpoint | `https://api.testnet.hlnames.xyz`|
+| Mainnet Minter Contract | `0x1DcB56cD62989c718D92FB71112371050b272CA9` |
+| Mainnet API Endpoint | `https://api.hlnames.xyz`|
 
 ## Introduction
 Hyperliquid Names enables names to be minted directly inside 3rd party dApps. This allows for a seamless onboarding flow where users can set up their wallet and give it a .hl identity in one experience. Combined with account abstraction, smart wallets, and other UX improvements, this enables dApps to deliver a familiar, web2-like account setup inside a web3 context.
@@ -31,7 +35,7 @@ Request a signed mint-pass for a given label.
 
 First, ensure the label is normalized before calling the API. We use the [`normalize`](https://viem.sh/docs/ens/utilities/normalize#normalize) utility from the `viem/ens` package. A label must be ENS-normal and between 1-30 characters.
 
-Next, send a `POST` request to the following resource URI with label appended: `/private/sign_mintpass/{label}`
+Next, send a `POST` request to the following resource URI with label appended: `/sign_mintpass/{label}`
 
 *   **Headers**:
     *   `X-API-Key`: `API_KEY`
@@ -90,7 +94,7 @@ Registration prices are based on the length of the desired name and are paid in 
 
 ## Example Snippets
 
+- https://demo.hlnames.xyz
 - **[`example/getSignedArgs.ts`](example/getSignedArgs.ts)**: A simple TypeScript function to request valid Minter arguments from the API.
 - **[`example/getSignedArgs+Mint.ts`](example/getSignedArgs%2BMint.ts)**: A complete TypeScript example demonstrating the full workflow, from fetching API arguments to preparing a transaction object on behalf of connected signer.
-- **[`example/mintWithApiArgs.s.sol`](example/mintWithApiArgs.s.sol)**: A forge script loading the API arguments to interact with the Minter contract via RPC.
 - **[`example/getSignedArgs+Mint.py`](example/getSignedArgs+Mint.py)**: The full workflow for Python environment.
