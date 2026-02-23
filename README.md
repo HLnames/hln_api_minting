@@ -10,7 +10,7 @@ Join our Telegram group: https://t.me/+pDbWCyCnvrxlZmJh
 | :--- | :--- |
 | Testnet Minter Contract | `0x39114061C1Fbd0d3E73CEd5eABf602D5d8813967` |
 | Testnet API Endpoint | `https://api.testnet.hlnames.xyz`|
-| Mainnet Minter Contract | `0x1DcB56cD62989c718D92FB71112371050b272CA9` |
+| Mainnet Minter Contract | `0xb1d8b142c6B8C1738D0F522164D618218d53aB00` |
 | Mainnet API Endpoint | `https://api.hlnames.xyz`|
 
 ## Introduction
