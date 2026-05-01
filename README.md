@@ -75,6 +75,38 @@ function mintWithNative(
 - The `msg.value` of this transaction must be equal to the `amountRequired` from the API response.
 - The `durationInYears` parameter is set by the client to determine the registration period. It defaults to 1 year.
 
+**Mint with USDH (ERC20):**
+
+To price the mint in USDH instead of HYPE, include the USDH token address in the API request body:
+
+```json
+POST /sign_mintpass/{label}
+{ "token": "0x22222245c52C817f95b74664AE8546B490222222" }
+```
+
+| **Network** | **USDH Address** |
+| :--- | :--- |
+| Testnet | `0x22222245c52C817f95b74664AE8546B490222222` |
+| Mainnet | `0x111111a1a0667d36bD57c0A9f569b98057111111` |
+
+The API echoes the checksummed token address in the response and `amountRequired` is denominated in USDH base units (6 decimals — `20000000` == $20.00). Any ERC20 with a price oracle configured on the on-chain Minter is accepted; unknown tokens return `422`.
+
+USDH minting is a two-tx flow:
+
+1. **Approve** the Minter contract to spend the user's USDH (skip this step if `allowance(user, minter) >= amountRequired`).
+2. Call `mintWithERC20` (no `msg.value`, no slippage buffer — the amount is exact):
+
+```solidity
+function mintWithERC20(
+    string calldata label,
+    uint256 durationInYears,
+    bytes calldata sig,
+    uint256 timestamp,
+    address token,
+    bytes32 referral
+) external;
+```
+
 ## Referral System
 
 The minting process includes an optional referral system.
@@ -98,3 +130,5 @@ Registration prices are based on the length of the desired name and are paid in 
 - **[`example/getSignedArgs.ts`](example/getSignedArgs.ts)**: A simple TypeScript function to request valid Minter arguments from the API.
 - **[`example/getSignedArgs+Mint.ts`](example/getSignedArgs%2BMint.ts)**: A complete TypeScript example demonstrating the full workflow, from fetching API arguments to preparing a transaction object on behalf of connected signer.
 - **[`example/getSignedArgs+Mint.py`](example/getSignedArgs+Mint.py)**: The full workflow for Python environment.
+- **[`example/getSignedArgs+MintERC20.ts`](example/getSignedArgs%2BMintERC20.ts)**: TypeScript USDH (ERC20) variant — fetch USDH-denominated mint args, ensure allowance, then call `mintWithERC20`.
+- **[`example/getSignedArgs+MintERC20.py`](example/getSignedArgs+MintERC20.py)**: The Python USDH (ERC20) variant.
