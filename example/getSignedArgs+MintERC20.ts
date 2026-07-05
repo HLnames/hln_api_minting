@@ -3,10 +3,10 @@ import { hyperliquidEvmTestnet } from 'viem/chains'
 import { normalize } from 'viem/ens'
 import { minterAbi, erc20Abi } from './abi/minterAbi'
 
-/** Get signature + minter arguments from API call (USDH / ERC20 variant) **/
+/** Get signature + minter arguments from API call (USDC / ERC20 variant) **/
 
-// Testnet USDH address. Mainnet: 0x111111a1a0667d36bD57c0A9f569b98057111111
-const USDH_TESTNET = '0x22222245c52C817f95b74664AE8546B490222222' as Address;
+// Testnet USDC address. Mainnet: 0xb88339CB7199b77E23DB6E890353E22632Ba630f
+const USDC_TESTNET = '0x2B3370eE501B4a559b57D449569354196457D8Ab' as Address;
 
 // Requires env var API_KEY.
 export const getSingleSignedLabelERC20 = async () => {
@@ -25,9 +25,9 @@ export const getSingleSignedLabelERC20 = async () => {
           'X-API-Key': apiKey,
           'Content-Type': 'application/json',
         },
-        // Pass the ERC20 token address to price the mint in USDH instead of native HYPE.
+        // Pass the ERC20 token address to price the mint in USDC instead of native HYPE.
         // Omitting `token` (or sending `"native"`) returns native pricing.
-        body: JSON.stringify({ token: USDH_TESTNET }),
+        body: JSON.stringify({ token: USDC_TESTNET }),
       },
     );
 
@@ -37,7 +37,7 @@ export const getSingleSignedLabelERC20 = async () => {
 
     // minter_args types: { label: string, sig: string, timestamp: number, token: string, amountRequired: string }
     // For ERC20 mode `token` is the checksummed token address and `amountRequired` is denominated
-    // in that token's base units (USDH = 6 decimals, so 20_000_000 == $20.00).
+    // in that token's base units (USDC = 6 decimals, so 20_000_000 == $20.00).
     const minter_args = await response.json();
     if (minter_args.sig === undefined) {
       throw new Error('Failed to get signature.');
@@ -67,8 +67,8 @@ export const createUserWalletClient = (walletProvider: any) => {
 };
 
 /**
- * Check the user's current USDH allowance for the Minter contract and, if it's below
- * `amountRequired`, return a transaction object that approves the Minter to spend the user's USDH.
+ * Check the user's current USDC allowance for the Minter contract and, if it's below
+ * `amountRequired`, return a transaction object that approves the Minter to spend the user's USDC.
  *
  * Returns `null` if the existing allowance is already sufficient — caller should skip straight
  * to the mint transaction in that case.
@@ -79,7 +79,7 @@ export const createUserWalletClient = (walletProvider: any) => {
  * `BigInt(minter_args.amountRequired)` for `maxUint256` below — the trade-off is one extra
  * approve tx per mint.
  */
-export const ensureUsdhAllowance = async (
+export const ensureUsdcAllowance = async (
   userAddress: Address,
   minter_args: any,
 ) => {
@@ -107,11 +107,11 @@ export const ensureUsdhAllowance = async (
 
 /**
  * Build the `mintWithERC20` transaction object. Unlike the native flow there's no `value` field
- * and no slippage buffer — the API returns the exact USDH amount the contract will charge, and
- * the price is fixed (USDH ≈ $1.00). The caller must send the approve transaction first (see
- * `ensureUsdhAllowance`) and wait for it to mine before submitting this transaction.
+ * and no slippage buffer — the API returns the exact USDC amount the contract will charge, and
+ * the price is fixed (USDC ≈ $1.00). The caller must send the approve transaction first (see
+ * `ensureUsdcAllowance`) and wait for it to mine before submitting this transaction.
  *
- * @param minter_args  The body returned from /sign_mintpass with `{ token: USDH_ADDRESS }`.
+ * @param minter_args  The body returned from /sign_mintpass with `{ token: USDC_ADDRESS }`.
  */
 export const prepareMintERC20Transaction = (minter_args: any) => {
   return {
@@ -130,16 +130,16 @@ export const prepareMintERC20Transaction = (minter_args: any) => {
 };
 
 /**
- * Full end-to-end example: fetch USDH-denominated mint args, ensure allowance, then mint.
+ * Full end-to-end example: fetch USDC-denominated mint args, ensure allowance, then mint.
  * `walletProvider` is e.g. `window.ethereum`.
  */
-export const mintWithUsdh = async (walletProvider: any, userAddress: Address) => {
+export const mintWithUsdc = async (walletProvider: any, userAddress: Address) => {
   const minter_args = await getSingleSignedLabelERC20();
   if (!minter_args) throw new Error('Failed to fetch mint args');
 
   const walletClient = createUserWalletClient(walletProvider);
 
-  const approveTx = await ensureUsdhAllowance(userAddress, minter_args);
+  const approveTx = await ensureUsdcAllowance(userAddress, minter_args);
   if (approveTx) {
     const approveHash = await walletClient.writeContract({ ...approveTx, account: userAddress });
     await publicClient.waitForTransactionReceipt({ hash: approveHash });

@@ -41,7 +41,7 @@ minter_abi = [
     },
 ]
 
-# Minimal ERC20 fragments needed for approve + allowance lookup when paying with USDH.
+# Minimal ERC20 fragments needed for approve + allowance lookup when paying with USDC.
 erc20_abi = [
     {
         "name": "approve",

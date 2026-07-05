@@ -41,7 +41,7 @@ export const minterAbi = [
   },
 ] as const;
 
-// Minimal ERC20 fragments needed for approve + allowance lookup when paying with USDH.
+// Minimal ERC20 fragments needed for approve + allowance lookup when paying with USDC.
 export const erc20Abi = [
   {
     name: 'approve',
