@@ -5,10 +5,10 @@ from web3.ens import normalize_name
 from eth_utils import to_checksum_address
 from .abi.minterAbi import minter_abi, erc20_abi
 
-# Get signature + minter arguments from API call (USDH / ERC20 variant)
+# Get signature + minter arguments from API call (USDC / ERC20 variant)
 
-# Testnet USDH address. Mainnet: 0x111111a1a0667d36bD57c0A9f569b98057111111
-USDH_TESTNET = '0x22222245c52C817f95b74664AE8546B490222222'
+# Testnet USDC address. Mainnet: 0xb88339CB7199b77E23DB6E890353E22632Ba630f
+USDC_TESTNET = '0x2B3370eE501B4a559b57D449569354196457D8Ab'
 
 MAX_UINT256 = (1 << 256) - 1
 
@@ -27,9 +27,9 @@ def get_single_signed_label_erc20():
                 'X-API-Key': api_key,
                 'Content-Type': 'application/json',
             },
-            # Pass the ERC20 token address to price the mint in USDH instead of native HYPE.
+            # Pass the ERC20 token address to price the mint in USDC instead of native HYPE.
             # Omitting `token` (or sending `"native"`) returns native pricing.
-            json={'token': USDH_TESTNET},
+            json={'token': USDC_TESTNET},
         )
 
         if not response.ok:
@@ -37,7 +37,7 @@ def get_single_signed_label_erc20():
 
         # minter_args types: { label, sig, timestamp, token, amountRequired }
         # For ERC20 mode `token` is the checksummed token address and `amountRequired` is
-        # denominated in that token's base units (USDH = 6 decimals, so 20_000_000 == $20.00).
+        # denominated in that token's base units (USDC = 6 decimals, so 20_000_000 == $20.00).
         minter_args = response.json()
         if 'sig' not in minter_args or minter_args['sig'] is None:
             raise Exception('Failed to get signature.')
@@ -58,7 +58,7 @@ def create_user_wallet_client(provider_url):
     return w3
 
 
-def ensure_usdh_allowance(web3_client, user_address, minter_args):
+def ensure_usdc_allowance(web3_client, user_address, minter_args):
     """Returns a built `approve(maxUint256)` transaction if current allowance is insufficient,
     otherwise None. Caller must sign + send + wait for receipt before submitting the mint tx.
 
@@ -91,8 +91,8 @@ def ensure_usdh_allowance(web3_client, user_address, minter_args):
 
 def prepare_mint_erc20_transaction(minter_args, web3_client):
     """Build the `mintWithERC20` transaction. No value field and no slippage buffer — the API
-    returns the exact USDH amount the contract will charge. Caller must ensure allowance first
-    (see `ensure_usdh_allowance`).
+    returns the exact USDC amount the contract will charge. Caller must ensure allowance first
+    (see `ensure_usdc_allowance`).
     """
     minter_checksum = to_checksum_address(minter_address)
     minter_contract = web3_client.eth.contract(address=minter_checksum, abi=minter_abi)
